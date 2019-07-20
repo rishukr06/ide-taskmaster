@@ -1,0 +1,46 @@
+{
+  "name": "ide-taskmaster",
+  "version": "0.0.0",
+  "description": "The taskmaster is a component of Online IDE and Compiler project which processes the code execution tasks.",
+  "scripts": {
+    "prebuild": "mkdirp dist",
+    "build": "tsc",
+    "prestart": "npm run dist",
+    "start": "node dist/taskmaster",
+    "dev": "nodemon --exec ts-node src/taskmaster.ts",
+    "test": "mocha --timeout 60000 --exit --require ts-node/register test/**/*.ts"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.1.7",
+    "@types/dotenv": "^6.1.1",
+    "@types/mkdirp": "^0.5.2",
+    "@types/mocha": "^5.2.7",
+    "@types/shelljs": "^0.8.5",
+    "chai": "^4.2.0",
+    "mocha": "^6.2.0",
+    "nodemon": "^1.19.1",
+    "ts-node": "^8.3.0",
+    "typescript": "^3.5.3"
+  },
+  "dependencies": {
+    "@google-cloud/pubsub": "^0.30.1",
+    "dotenv": "^8.0.0",
+    "mkdirp": "^0.5.1",
+    "shelljs": "^0.8.3"
+  },
+  "engines": {
+    "node": "8 || 10",
+    "npm": ">= 5",
+    "yarn": ">= 1"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "dist/",
+      "test/",
+      "**/*.spec.ts"
+    ],
+    "delay": "2500"
+  },
+  "author": "Faisal Alam <ifaisalalam@gmail.com>",
+  "license": "MIT"
+}

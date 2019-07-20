@@ -1,0 +1,32 @@
+language: node_js
+
+branches:
+  only:
+    - master
+
+jobs:
+  include:
+    - stage: test
+      install:
+        - npm install
+      script:
+        - npm run test
+
+    - stage: deploy
+      install:
+        - npm install
+      before_script:
+        - npm run build
+
+stages:
+  - name: test
+    if: type = pull_request | push
+  - name: deploy
+    if: type = push
+
+notifications:
+  email:
+    on_success: change
+    on_failure: always
+    recipients:
+      - ifaisalalam@gmail.com

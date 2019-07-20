@@ -1,0 +1,9 @@
+version: "3.7"
+
+services:
+  taskmaster:
+    build: .
+    image: ifaisalalam/ide-taskmaster
+    restart: on-failure
+    env_file:
+      - .env
