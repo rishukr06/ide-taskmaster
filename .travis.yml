@@ -28,10 +28,10 @@ jobs:
       before_install:
         - sudo chmod +x build_docker_image.sh
         - sudo chmod +x push_docker_image.sh
-        before_script:
-          - ./build_docker_image.sh
-        script:
-          - ./push_docker_image.sh
+      before_script:
+        - ./build_docker_image.sh
+      script:
+        - ./push_docker_image.sh
 
 stages:
   - test
