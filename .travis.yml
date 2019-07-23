@@ -1,8 +1,20 @@
 language: node_js
+node_js:
+  - "8"
+
+sudo: required
 
 branches:
   only:
     - master
+
+addons:
+  apt:
+    packages:
+      - bash
+
+services:
+  - docker
 
 jobs:
   include:
@@ -13,14 +25,16 @@ jobs:
         - npm run test
 
     - stage: deploy
-      install:
-        - npm install
-      before_script:
-        - npm run build
+      before_install:
+        - sudo chmod +x build_docker_image.sh
+        - sudo chmod +x push_docker_image.sh
+        before_script:
+          - ./build_docker_image.sh
+        script:
+          - ./push_docker_image.sh
 
 stages:
-  - name: test
-    if: type = pull_request | push
+  - test
   - name: deploy
     if: type = push
 
