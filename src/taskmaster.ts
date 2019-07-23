@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 import { PubSub } from '@google-cloud/pubsub';
-import * as config from '../config';
+const config = require('../config');
 
 const pubsub = new PubSub();
 
