@@ -1,16 +1,44 @@
 require('dotenv').config();
 
-import { PubSub } from '@google-cloud/pubsub';
 const config = require('../config');
 
-const pubsub = new PubSub();
+import { PubSub } from '@google-cloud/pubsub';
+import { ClientConfig } from '@google-cloud/pubsub/build/src/pubsub';
+import { SubscriberOptions, Message } from '@google-cloud/pubsub/build/src/subscriber';
 
-const subscriptionName = config.CLOUD_PUBSUB.SUBSCRIPTION_NAME;
+import * as worker from './tasks/run';
 
-const subscription = pubsub.subscription(subscriptionName);
+import { IJobResult } from './types';
 
-const runTask = message => {
-  console.log(message);
+const pubsubConfig: ClientConfig = {
+  projectId: process.env.GOOGLE_CLOUD_PROJECT,
+  keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS
 };
 
-subscription.on('message', runTask);
+const pubsub = new PubSub(pubsubConfig);
+
+const jobSubscriptionName: string = config.CLOUD_PUBSUB.SUBSCRIPTION_NAME;
+const jobSubscriptionOptions: SubscriberOptions = {
+  ackDeadline: 10,
+  flowControl: {
+    maxMessages: config.WORKER.MAX_CONCURRENT_TASKS
+  }
+};
+
+const subscription = pubsub.subscription(jobSubscriptionName, jobSubscriptionOptions);
+
+const successTopicName: string = config.CLOUD_PUBSUB.SUCCESS_TOPIC;
+
+const done = (message: Message, output: IJobResult) => {
+  const outputBuffer = Buffer.from(JSON.stringify(output));
+  pubsub
+    .topic(successTopicName)
+    .publish(outputBuffer)
+    .catch(reason => {
+      console.error(reason);
+    });
+
+  message.ack();
+};
+
+subscription.on('message', (message: Message) => worker(message, done));

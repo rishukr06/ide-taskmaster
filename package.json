@@ -35,12 +35,16 @@
   },
   "nodemonConfig": {
     "ignore": [
+      "src/types",
       "dist/",
       "test/",
       "**/*.spec.ts"
     ],
-    "delay": "2500"
+    "delay": 2500
   },
-  "author": "Faisal Alam <ifaisalalam@gmail.com>",
+  "author": {
+    "name": "Faisal Alam",
+    "email": "ifaisalalam@gmail.com"
+  },
   "license": "MIT"
 }
