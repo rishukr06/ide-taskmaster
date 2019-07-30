@@ -2,5 +2,13 @@
 node_modules/
 dist/
 
+.gitignore
+.dockerignore
 .env
+.travis.yml
 credentials.json
+build_docker_image.sh
+push_docker_image.sh
+pull_docker_images.sh
+docker-compose.yml
+Dockerfile
