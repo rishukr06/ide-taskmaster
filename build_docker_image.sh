@@ -2,6 +2,6 @@
 
 cd "$(dirname "$0")" || exit
 
-docker image rm ifaisalalam/ctfhub-auth 2> /dev/null
+docker image rm ifaisalalam/ide-taskmaster 2> /dev/null
 
-docker build -t ifaisalalam/ctfhub-auth .
+docker build -t ifaisalalam/ide-taskmaster .

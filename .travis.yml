@@ -19,8 +19,12 @@ services:
 jobs:
   include:
     - stage: test
+      before_install:
+        - sudo chmod +x pull_worker_images.sh
       install:
         - npm install
+      before_script:
+        - ./pull_worker_images
       script:
         - npm run test
 
