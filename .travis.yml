@@ -24,7 +24,7 @@ jobs:
       install:
         - npm install
       before_script:
-        - ./pull_worker_images
+        - ./pull_worker_images.sh
       script:
         - npm run test
 
