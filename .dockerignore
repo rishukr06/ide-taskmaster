@@ -4,11 +4,16 @@ dist/
 
 .gitignore
 .dockerignore
+.editorconfig
 .env
+.env.example
 .travis.yml
 credentials.json
+test_as_docker.sh
 build_docker_image.sh
 push_docker_image.sh
 pull_docker_images.sh
 docker-compose.yml
 Dockerfile
+LICENSE
+README.md

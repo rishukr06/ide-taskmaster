@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-  - "8"
+  - "10"
 
 sudo: required
 
@@ -21,12 +21,14 @@ jobs:
     - stage: test
       before_install:
         - sudo chmod +x pull_worker_images.sh
+        - sudo chmod +x test_as_docker.sh
       install:
         - npm install
       before_script:
         - ./pull_worker_images.sh
       script:
         - npm run test
+        - ./test_as_docker.sh
 
     - stage: deploy
       before_install:

@@ -1,5 +1,5 @@
 # Build stage
-FROM node:8-alpine as builder
+FROM node:10-alpine as builder
 
 WORKDIR /home/node/app
 
@@ -12,9 +12,11 @@ COPY . .
 RUN npm run build
 
 # Deployment stage
-FROM node:8-alpine
+FROM node:10-alpine
 
-RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
+RUN apk add --no-cache docker && \
+mkdir -p /home/node/app/node_modules && \
+chown -R node:node /home/node/app
 
 WORKDIR /home/node/app
 
@@ -26,11 +28,10 @@ ENV PATH=$PATH:/home/node/.npm-global/bin
 
 USER node
 
-RUN npm install --only=production
+RUN npm install --only=production && \
+mkdir dist
 
 COPY --chown=node:node . .
-
-RUN mkdir dist
 
 COPY --from=builder --chown=node:node /home/node/app/dist ./dist
 
