@@ -5,7 +5,7 @@ module.exports = {
   },
   WORKER: {
     MAX_CONCURRENT_TASKS: parseInt(process.env.MAX_CONCURRENT_JOBS) || 1,
-    BOX_DIR: process.env.WORKER_BOX_DIR || '/tmp/box',
+    BOX_DIR: process.env.WORKER_BOX_DIR || '/tmp/box/jobs',
     LANG: {
       'c': {
         SOURCE_FILE: 'source.c',
