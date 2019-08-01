@@ -21,9 +21,11 @@ jobs:
     - stage: test
       before_install:
         - sudo chmod +x pull_worker_images.sh
+        - sudo chmod +x build_docker_image.sh
         - sudo chmod +x test_as_docker.sh
       install:
         - npm install
+        - ./build_docker_image.sh
       before_script:
         - ./pull_worker_images.sh
       script:
@@ -34,7 +36,7 @@ jobs:
       before_install:
         - sudo chmod +x build_docker_image.sh
         - sudo chmod +x push_docker_image.sh
-      before_script:
+      install:
         - ./build_docker_image.sh
       script:
         - ./push_docker_image.sh
