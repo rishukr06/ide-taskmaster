@@ -1,6 +1,7 @@
 module.exports = {
   CLOUD_PUBSUB: {
-    SUBSCRIPTION_NAME: process.env.PUBSUB_IDE_SUBSCRIPTION || 'projects/project-id/topics/ide-tasks',
+    TOPIC_NAME: process.env.PUBSUB_IDE_TOPIC || 'projects/project-id/topics/ide-tasks',
+    SUBSCRIPTION_NAME: process.env.PUBSUB_IDE_SUBSCRIPTION || 'subscription-id',
     OUTPUT_TOPIC: process.env.PUBSUB_IDE_OUTPUT_TOPIC || 'projects/project-id/topics/ide-task-results'
   },
   WORKER: {
