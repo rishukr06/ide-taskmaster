@@ -1,7 +1,7 @@
 module.exports = {
   CLOUD_PUBSUB: {
-    SUBSCRIPTION_NAME: process.env.PUBSUB_IDE_SUBSCRIPTION || 'ide_jobs',
-    SUCCESS_TOPIC: process.env.PUBSUB_IDE_SUCCESS_TOPIC || 'ide_outputs'
+    SUBSCRIPTION_NAME: process.env.PUBSUB_IDE_SUBSCRIPTION || 'projects/project-id/topics/ide-tasks',
+    OUTPUT_TOPIC: process.env.PUBSUB_IDE_OUTPUT_TOPIC || 'projects/project-id/topics/ide-task-results'
   },
   WORKER: {
     MAX_CONCURRENT_TASKS: parseInt(process.env.MAX_CONCURRENT_JOBS) || 1,

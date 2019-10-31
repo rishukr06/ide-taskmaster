@@ -10,7 +10,7 @@ import * as fs from 'fs';
 rm('-rf', config.WORKER.BOX_DIR);
 mkdir('-p', config.WORKER.BOX_DIR);
 
-const worker = (message: Message, done: (message: Message, output: IJobResult) => void) => {
+const worker = async (message: Message, done: (message: Message, output: IJobResult) => void) => {
   const job: IJob = JSON.parse(Buffer.from(message.data).toString());
 
   const jobExecutionPath = path.join(config.WORKER.BOX_DIR, `${job.id}`);
@@ -59,9 +59,9 @@ const worker = (message: Message, done: (message: Message, output: IJobResult) =
     stdout
   };
 
-  done(message, output);
-
   rm('-rf', jobExecutionPath);
+
+  return done(message, output);
 };
 
 export = worker;

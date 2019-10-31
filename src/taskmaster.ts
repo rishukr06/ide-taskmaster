@@ -27,23 +27,20 @@ const jobSubscriptionOptions: SubscriberOptions = {
 
 const subscription = pubsub.subscription(jobSubscriptionName, jobSubscriptionOptions);
 
-const successTopicName: string = config.CLOUD_PUBSUB.SUCCESS_TOPIC;
+const outputTopicName: string = config.CLOUD_PUBSUB.OUTPUT_TOPIC;
 
 const done = (message: Message, output: IJobResult) => {
-  const outputBuffer = Buffer.from(JSON.stringify(output));
-  pubsub
-    .topic(successTopicName)
-    .publish(outputBuffer)
-    .catch(reason => {
-      console.error(reason);
-    });
-
   message.ack();
+
+  const outputBuffer = Buffer.from(JSON.stringify(output));
+  return pubsub
+    .topic(outputTopicName)
+    .publish(outputBuffer);
 };
 
-subscription.on('message', (message: Message) => {
+subscription.on('message', async (message: Message) => {
   try {
-    worker(message, done);
+    await worker(message, done);
   } catch (e) {
     // TODO: Report error.
   }
