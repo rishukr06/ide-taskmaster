@@ -11,21 +11,21 @@
     "test": "mocha --timeout 60000 --exit --require ts-node/register test/**/*.ts"
   },
   "devDependencies": {
-    "@types/chai": "^4.1.7",
+    "@types/chai": "^4.2.4",
     "@types/dotenv": "^6.1.1",
     "@types/mkdirp": "^0.5.2",
     "@types/mocha": "^5.2.7",
     "@types/shelljs": "^0.8.5",
     "chai": "^4.2.0",
-    "mocha": "^6.2.0",
-    "nodemon": "^1.19.1",
-    "ts-node": "^8.3.0",
-    "typescript": "^3.5.3"
+    "mocha": "^6.2.2",
+    "nodemon": "^1.19.4",
+    "ts-node": "^8.4.1",
+    "typescript": "^3.6.4"
   },
   "dependencies": {
     "@google-cloud/error-reporting": "^1.1.2",
-    "@google-cloud/pubsub": "^0.30.1",
-    "dotenv": "^8.0.0",
+    "@google-cloud/pubsub": "^0.30.3",
+    "dotenv": "^8.2.0",
     "grpc": "^1.24.1",
     "mkdirp": "^0.5.1",
     "shelljs": "^0.8.3"
