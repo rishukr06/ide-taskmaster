@@ -41,4 +41,10 @@ const done = (message: Message, output: IJobResult) => {
   message.ack();
 };
 
-subscription.on('message', (message: Message) => worker(message, done));
+subscription.on('message', (message: Message) => {
+  try {
+    worker(message, done);
+  } catch (e) {
+    // TODO: Report error.
+  }
+});

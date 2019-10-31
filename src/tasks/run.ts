@@ -28,7 +28,7 @@ const worker = (message: Message, done: (message: Message, output: IJobResult) =
     (new Buffer(job.stdin, 'base64')).toString('ascii')
   );
 
-  exec(`docker run \\
+  const shellOutput = exec(`docker run \\
     --cpus="${LANG_CONFIG.CPU_SHARES}" \\
     --memory="${LANG_CONFIG.MEM_LIMIT}" \\
     --ulimit nofile=64:64 \\
@@ -39,6 +39,14 @@ const worker = (message: Message, done: (message: Message, output: IJobResult) =
     ifaisalalam/ide-worker-${job.lang} \\
     bash -c "/bin/compile.sh && /bin/run.sh"
   `);
+
+  if (shellOutput.code !== 0) {
+    const error = new Error(`Failed to spawn docker container: ${shellOutput.stderr}`);
+    // @ts-ignore
+    error.status = shellOutput.code || 500;
+
+    throw error;
+  }
 
   const stdout = cat(path.join(jobExecutionPath, 'run.stdout'));
 
