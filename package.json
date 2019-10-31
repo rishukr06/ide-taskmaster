@@ -26,6 +26,7 @@
     "@google-cloud/error-reporting": "^1.1.2",
     "@google-cloud/pubsub": "^0.30.1",
     "dotenv": "^8.0.0",
+    "grpc": "^1.24.1",
     "mkdirp": "^0.5.1",
     "shelljs": "^0.8.3"
   },

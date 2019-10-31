@@ -14,7 +14,8 @@ const stackdriver = require('./utils/stackdriver');
 
 const pubsubConfig: ClientConfig = {
   projectId: process.env.GOOGLE_CLOUD_PROJECT,
-  keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS
+  keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS,
+  grpc: require('grpc')
 };
 
 const pubsub = new PubSub(pubsubConfig);
