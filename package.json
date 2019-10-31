@@ -23,6 +23,7 @@
     "typescript": "^3.5.3"
   },
   "dependencies": {
+    "@google-cloud/error-reporting": "^1.1.2",
     "@google-cloud/pubsub": "^0.30.1",
     "dotenv": "^8.0.0",
     "mkdirp": "^0.5.1",

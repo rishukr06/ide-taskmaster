@@ -10,6 +10,8 @@ import * as worker from './tasks/run';
 
 import { IJobResult } from './types';
 
+const stackdriver = require('./utils/stackdriver');
+
 const pubsubConfig: ClientConfig = {
   projectId: process.env.GOOGLE_CLOUD_PROJECT,
   keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS
@@ -42,6 +44,6 @@ subscription.on('message', async (message: Message) => {
   try {
     await worker(message, done);
   } catch (e) {
-    // TODO: Report error.
+    stackdriver.reportError(e);
   }
 });
