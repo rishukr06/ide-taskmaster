@@ -4,7 +4,8 @@ const config = require('../config');
 
 import { PubSub } from '@google-cloud/pubsub';
 import { ClientConfig } from '@google-cloud/pubsub/build/src/pubsub';
-import { SubscriberOptions, Message } from '@google-cloud/pubsub/build/src/subscriber';
+import { SubscriptionOptions } from '@google-cloud/pubsub/build/src/subscription';
+import { Message } from '@google-cloud/pubsub/build/src/subscriber';
 
 import * as worker from './tasks/run';
 
@@ -21,8 +22,7 @@ const pubsubConfig: ClientConfig = {
 const pubsub = new PubSub(pubsubConfig);
 
 const jobSubscriptionName: string = config.CLOUD_PUBSUB.SUBSCRIPTION_NAME;
-const jobSubscriptionOptions: SubscriberOptions = {
-  ackDeadline: parseInt(process.env.PUBSUB_ACK_DEADLINE || '10'),
+const jobSubscriptionOptions: SubscriptionOptions = {
   flowControl: {
     maxMessages: config.WORKER.MAX_CONCURRENT_TASKS
   }
