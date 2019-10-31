@@ -22,7 +22,7 @@ const pubsub = new PubSub(pubsubConfig);
 
 const jobSubscriptionName: string = config.CLOUD_PUBSUB.SUBSCRIPTION_NAME;
 const jobSubscriptionOptions: SubscriberOptions = {
-  ackDeadline: 10,
+  ackDeadline: parseInt(process.env.PUBSUB_ACK_DEADLINE || '10'),
   flowControl: {
     maxMessages: config.WORKER.MAX_CONCURRENT_TASKS
   }
@@ -33,12 +33,13 @@ const subscription = pubsub.subscription(jobSubscriptionName, jobSubscriptionOpt
 const outputTopicName: string = config.CLOUD_PUBSUB.OUTPUT_TOPIC;
 
 const done = (message: Message, output: IJobResult) => {
-  message.ack();
-
   const outputBuffer = Buffer.from(JSON.stringify(output));
   return pubsub
     .topic(outputTopicName)
-    .publish(outputBuffer);
+    .publish(outputBuffer)
+    .finally(() => {
+      message.ack();
+    });
 };
 
 subscription.on('message', async (message: Message) => {
