@@ -1,6 +1,7 @@
 .idea/
 node_modules/
 dist/
+terraform/
 
 .gitignore
 .dockerignore
@@ -13,6 +14,8 @@ test_as_docker.sh
 build_docker_image.sh
 push_docker_image.sh
 pull_docker_images.sh
+terraform-apply.sh
+terraform-destroy.sh
 docker-compose.yml
 Dockerfile
 LICENSE
