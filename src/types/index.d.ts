@@ -9,4 +9,5 @@ export interface IJobResult {
   job: IJob
   stdout: string
   stderr: string
+  compile_stderr: string
 }

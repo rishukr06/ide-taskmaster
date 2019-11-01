@@ -16,20 +16,16 @@ int main() {
 `;
 
 describe('Test C code execution', () => {
-  it('should print "Hello world" to stdout and nothing to stderr', () => {
-    const message = {
-      data: Buffer.from(JSON.stringify(<IJob>{
-        id: 1,
-        lang: 'c',
-        source: Buffer.from(c_code).toString('base64'),
-        stdin: Buffer.from('world').toString('base64')
-      }))
+  it('should print "Hello world" to stdout and nothing to stderr', async () => {
+    const job: IJob = {
+      id: 1,
+      lang: 'c',
+      source: Buffer.from(c_code).toString('base64'),
+      stdin: Buffer.from('world').toString('base64')
     };
 
-    // @ts-ignore
-    worker(message, (message, output: IJobResult) => {
-      chai.assert.equal(output.stderr, '');
-      chai.assert.equal(output.stdout, 'Hello world');
-    });
+    const output: IJobResult = (await worker(job)).output;
+    chai.assert.equal(output.stderr, '');
+    chai.assert.equal(output.stdout, 'Hello world');
   });
 });
