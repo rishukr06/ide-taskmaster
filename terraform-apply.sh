@@ -22,4 +22,6 @@ terraform init \
 
 terraform validate
 
+terraform taint google_compute_instance_template.ide_worker 2> /dev/null
+
 terraform apply -auto-approve
