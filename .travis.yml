@@ -32,7 +32,7 @@ jobs:
         - npm run test
         - ./test_as_docker.sh
 
-    - stage: deploy
+    - stage: build
       before_install:
         - sudo chmod +x build_docker_image.sh
         - sudo chmod +x push_docker_image.sh
@@ -40,11 +40,23 @@ jobs:
         - ./build_docker_image.sh
       script:
         - ./push_docker_image.sh
-      after_success:
+
+    - stage: deploy
+      before_script:
+        - git config --global user.name "$GITLAB_USER"
+        - git config --global user.email "$GITLAB_EMAIL"
+      install:
+        - git remote rename origin old-origin
+        - git remote add origin $GITLAB_ORIGIN_REPO
+        - git push -u origin --all
+        - git push -u origin --tags
+      script:
         - curl -X POST -F token=$GITLAB_TOKEN -F ref=$REF_NAME https://gitlab-ce.ctfhub.io/api/v4/projects/3/trigger/pipeline
 
 stages:
   - test
+  - name: build
+    if: type = push
   - name: deploy
     if: type = push
 
