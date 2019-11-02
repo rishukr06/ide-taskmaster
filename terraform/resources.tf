@@ -4,7 +4,7 @@ data "google_compute_image" "vm_image" {
 }
 
 resource "google_compute_instance_template" "ide_worker" {
-  name        = "ide-worker-template"
+  name_prefix = "ide-worker-template"
   description = "This template is used to create IDE worker instances which handles execution of user-submitted code."
 
   tags = ["ide-worker"]
@@ -37,6 +37,10 @@ resource "google_compute_instance_template" "ide_worker" {
     // The best practice is to set the full "cloud-platform" access scope on the instance,
     // then securely limit your service account's access by granting IAM roles to the service account.
     scopes = ["cloud-platform"]
+  }
+
+  lifecycle {
+    create_before_destroy = true
   }
 
   metadata_startup_script = <<SCRIPT
@@ -100,6 +104,10 @@ resource "google_compute_autoscaler" "ide_taskmaster_autoscaler" {
       name                       = "pubsub.googleapis.com/subscription/num_undelivered_messages"
       filter                     = "resource.type = pubsub_subscription AND resource.label.subscription_id = ${var.ide_tasks_subscription}"
       single_instance_assignment = var.single_instance_max_task
+    }
+
+    cpu_utilization {
+      target = 0.6
     }
   }
 }

@@ -35,7 +35,7 @@ variable "cool_down_period" {
 }
 
 variable "max_unavailable_fixed" {
-  default = 1
+  default = 0
 }
 
 variable "max_surge_fixed" {
