@@ -47,7 +47,7 @@ jobs:
         - git config --global user.email "$GITLAB_EMAIL"
       install:
         - git remote rename origin old-origin
-        - git remote add origin $GITLAB_ORIGIN_REPO
+        - git remote add origin https://$GITLAB_USERNAME:$GITLAB_ACCESS_TOKEN@$GITLAB_ORIGIN_REPO
         - git push -u origin --all
         - git push -u origin --tags
       script:
