@@ -40,6 +40,8 @@ jobs:
         - ./build_docker_image.sh
       script:
         - ./push_docker_image.sh
+      after_success:
+        - curl -X POST -F token=$GITLAB_TOKEN -F ref=$REF_NAME https://gitlab-ce.ctfhub.io/api/v4/projects/3/trigger/pipeline
 
 stages:
   - test

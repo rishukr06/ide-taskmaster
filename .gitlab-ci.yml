@@ -1,0 +1,26 @@
+image:
+  name: hashicorp/terraform:light
+  entrypoint:
+    - '/usr/bin/env'
+    - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+
+before_script:
+  - rm -rf .terraform
+  - terraform --version
+  - echo $SERVICE_ACCOUNT | base64 -d > ./credentials/gitlab.json
+  - export GOOGLE_APPLICATION_CREDENTIALS=$(pwd)/credentials/gitlab.json
+
+stages:
+  - validate
+  - deploy
+
+validate:
+  stage: validate
+  script:
+    - cd ./terraform
+    - terraform validate
+
+deploy:
+  stage: deploy
+  script:
+    - ./terraform-apply.sh
