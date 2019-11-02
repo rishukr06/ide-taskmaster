@@ -42,7 +42,7 @@ resource "google_compute_instance_template" "ide_worker" {
   metadata_startup_script = <<SCRIPT
   #!/bin/bash
 
-  apt-get -y update
+  yum -y update
   curl https://get.docker.com | sh
   systemctl start docker
   mkdir -p /tmp/box
