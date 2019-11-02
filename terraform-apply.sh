@@ -20,4 +20,6 @@ terraform init \
   --backend-config "bucket=$GCS_BUCKET_NAME" \
   --backend-config "path=$GCS_BUCKET_PATH"
 
+terraform validate
+
 terraform apply -auto-approve

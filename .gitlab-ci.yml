@@ -12,14 +12,7 @@ before_script:
   - export GOOGLE_APPLICATION_CREDENTIALS=$(pwd)/credentials/gitlab.json
 
 stages:
-  - validate
   - deploy
-
-validate:
-  stage: validate
-  script:
-    - cd ./terraform
-    - terraform validate
 
 deploy:
   stage: deploy
