@@ -79,20 +79,20 @@ resource "google_compute_instance_template" "ide_worker" {
   mkdir -p /tmp/box
   chmod 777 -R /tmp/box
 
-  cat <<CONF >> /etc/supervisor/conf.d/taskmaster.conf
-  [program:my-api]
-  command=node /home/node/taskmaster/dist/taskmaster.js
-  autostart=true
-  autorestart=true
-  environment=PUBSUB_IDE_TOPIC=${var.ide_tasks_name}
-  environment=PUBSUB_IDE_SUBSCRIPTION=${var.ide_tasks_subscription}
-  environment=PUBSUB_IDE_OUTPUT_TOPIC=${var.ide_task_results_topic}
-  environment=MAX_CONCURRENT_JOBS=${var.single_instance_max_task}
-  environment=NODE_ENV=${var.app_env}
-  stderr_logfile=/var/log/taskmaster.err.log
-  stdout_logfile=/var/log/taskmaster.out.log
-  user=node
-  CONF
+  tee -a /etc/supervisord.conf > /dev/null <<CONF
+[program:taskmaster]
+command=node /home/node/taskmaster/dist/taskmaster.js
+autostart=true
+autorestart=true
+environment=PUBSUB_IDE_TOPIC=${var.ide_tasks_name}
+environment=PUBSUB_IDE_SUBSCRIPTION=${var.ide_tasks_subscription}
+environment=PUBSUB_IDE_OUTPUT_TOPIC=${var.ide_task_results_topic}
+environment=MAX_CONCURRENT_JOBS=${var.single_instance_max_task}
+environment=NODE_ENV=${var.app_env}
+stderr_logfile=/var/log/taskmaster.err.log
+stdout_logfile=/var/log/taskmaster.out.log
+user=node
+CONF
 
   supervisorctl reread
   supervisorctl update
