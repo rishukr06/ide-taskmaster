@@ -84,11 +84,12 @@ resource "google_compute_instance_template" "ide_worker" {
 command=node /home/node/taskmaster/dist/taskmaster.js
 autostart=true
 autorestart=true
-environment=PUBSUB_IDE_TOPIC=${var.ide_tasks_name}
-environment=PUBSUB_IDE_SUBSCRIPTION=${var.ide_tasks_subscription}
-environment=PUBSUB_IDE_OUTPUT_TOPIC=${var.ide_task_results_topic}
-environment=MAX_CONCURRENT_JOBS=${var.single_instance_max_task}
-environment=NODE_ENV=${var.app_env}
+environment=
+    PUBSUB_IDE_TOPIC=${var.ide_tasks_name},
+    PUBSUB_IDE_SUBSCRIPTION=${var.ide_tasks_subscription},
+    PUBSUB_IDE_OUTPUT_TOPIC=${var.ide_task_results_topic},
+    MAX_CONCURRENT_JOBS=${var.single_instance_max_task},
+    NODE_ENV=${var.app_env}
 stderr_logfile=/var/log/taskmaster.err.log
 stdout_logfile=/var/log/taskmaster.out.log
 user=node
