@@ -47,20 +47,55 @@ resource "google_compute_instance_template" "ide_worker" {
   #!/bin/bash
 
   yum -y update
+  yum install epel-release
+  yum -y update
+  yum -y install supervisor
+  systemctl start supervisord
+  systemctl enable supervisord
+
   curl https://get.docker.com | sh
   systemctl start docker
+
+  curl -sL https://rpm.nodesource.com/setup_10.x | sudo bash -
+  yum clean all
+  yum makecache fast
+  yum -y install -y gcc-c++ make
+  yum -y install nodejs
+
+  yum -y install git
+
+  groupadd docker
+  adduser node
+  usermod -aG docker node
+
+  mkdir -p /home/node/taskmaster
+  git clone https://github.com/ifaisalalam/ide-taskmaster /home/node/taskmaster
+  cd /home/node/taskmaster
+  npm install
+  npm run build
+  rm -rf node_modules/*
+  npm install --only=production
+
   mkdir -p /tmp/box
-  docker run \
-  --detach \
-  --mount 'type=bind,src=/var/run/docker.sock,dst=/var/run/docker.sock' \
-  --mount 'type=bind,src=/tmp/box,dst=/tmp/box' \
-  --env PUBSUB_IDE_TOPIC=${var.ide_tasks_name} \
-  --env PUBSUB_IDE_SUBSCRIPTION=${var.ide_tasks_subscription} \
-  --env PUBSUB_IDE_OUTPUT_TOPIC=${var.ide_task_results_topic} \
-  --env MAX_CONCURRENT_JOBS=${var.single_instance_max_task} \
-  --env NODE_ENV=${var.app_env} \
-  --restart always \
-  ${var.worker_docker_image_name}
+  chmod 777 -R /tmp/box
+
+  cat <<CONF >> /etc/supervisor/conf.d/taskmaster.conf
+  [program:my-api]
+  command=node /home/node/taskmaster/dist/taskmaster.js
+  autostart=true
+  autorestart=true
+  environment=PUBSUB_IDE_TOPIC=${var.ide_tasks_name}
+  environment=PUBSUB_IDE_SUBSCRIPTION=${var.ide_tasks_subscription}
+  environment=PUBSUB_IDE_OUTPUT_TOPIC=${var.ide_task_results_topic}
+  environment=MAX_CONCURRENT_JOBS=${var.single_instance_max_task}
+  environment=NODE_ENV=${var.app_env}
+  stderr_logfile=/var/log/taskmaster.err.log
+  stdout_logfile=/var/log/taskmaster.out.log
+  user=node
+  CONF
+
+  supervisorctl reread
+  supervisorctl update
   SCRIPT
 }
 
