@@ -33,6 +33,7 @@ const worker = async (message: IJob) => {
     --read-only \\
     -v ${jobExecutionPath}:${config.WORKER.BOX_DIR} \\
     -w ${config.WORKER.BOX_DIR} \\
+    -e DEFAULT_TIMEOUT=${message.timeoutSeconds || 5} \\
     ifaisalalam/ide-worker-${message.lang} \\
     bash -c "/bin/compile.sh && /bin/run.sh"
   `);

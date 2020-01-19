@@ -3,6 +3,7 @@ export interface IJob {
   source: string
   stdin: string
   lang: string
+  timeoutSeconds?: number
 }
 
 export interface IJobResult {
