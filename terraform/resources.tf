@@ -59,7 +59,7 @@ resource "google_compute_instance_template" "ide_worker" {
   curl -sL https://rpm.nodesource.com/setup_10.x | sudo bash -
   yum clean all
   yum makecache fast
-  yum -y install -y gcc-c++ make
+  yum -y install gcc-c++ make
   yum -y install nodejs
 
   yum -y install git
