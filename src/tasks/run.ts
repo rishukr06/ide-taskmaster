@@ -43,11 +43,17 @@ const worker = async (message: IJob) => {
   const compile_stderr = cat(path.join(jobExecutionPath, 'compile.stderr')).stdout || '';
   const stderr = cat(path.join(jobExecutionPath, 'run.stderr')).stdout || '';
 
+  let isTLE = false;
+  if (stderr.slice(0, 3) === 'TLE') {
+    isTLE = true;
+  }
+
   const output: IJobResult = {
     job: message,
     stderr,
     compile_stderr,
-    stdout
+    stdout,
+    isTLE
   };
 
   rm('-rf', jobExecutionPath);
