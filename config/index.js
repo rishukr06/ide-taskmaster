@@ -20,13 +20,13 @@ module.exports = {
       },
       'python2': {
         SOURCE_FILE: 'source.py',
-        CPU_SHARES: '0.8',
-        MEM_LIMIT: '200m'
+        CPU_SHARES: '1.0',
+        MEM_LIMIT: '300m'
       },
       'python3': {
         SOURCE_FILE: 'source.py',
-        CPU_SHARES: '0.8',
-        MEM_LIMIT: '200m'
+        CPU_SHARES: '1.0',
+        MEM_LIMIT: '300m'
       },
       'nodejs8': {
         SOURCE_FILE: 'source.js',
