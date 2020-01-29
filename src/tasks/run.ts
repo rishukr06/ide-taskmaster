@@ -42,9 +42,10 @@ const worker = async (message: IJob) => {
 
   const compile_stderr = cat(path.join(jobExecutionPath, 'compile.stderr')).stdout || '';
   const stderr = cat(path.join(jobExecutionPath, 'run.stderr')).stdout || '';
+  const tle_err = cat(path.join(jobExecutionPath, 'tle.stderr')).stdout || '';
 
   let isTLE = false;
-  if (stderr.slice(0, 3) === 'TLE') {
+  if (tle_err.slice(0, 3) === 'TLE') {
     isTLE = true;
   }
 
