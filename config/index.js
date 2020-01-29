@@ -17,6 +17,21 @@ module.exports = {
         SOURCE_FILE: 'source.cpp',
         CPU_SHARES: '0.8',
         MEM_LIMIT: '200m'
+      },
+      'python2': {
+        SOURCE_FILE: 'source.py',
+        CPU_SHARES: '0.8',
+        MEM_LIMIT: '200m'
+      },
+      'python3': {
+        SOURCE_FILE: 'source.py',
+        CPU_SHARES: '0.8',
+        MEM_LIMIT: '200m'
+      },
+      'nodejs8': {
+        SOURCE_FILE: 'source.js',
+        CPU_SHARES: '0.8',
+        MEM_LIMIT: '300m'
       }
     }
   }
