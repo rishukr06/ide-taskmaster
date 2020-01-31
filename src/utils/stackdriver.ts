@@ -19,7 +19,14 @@ const errors = new ErrorReporting(
 );
 
 export = {
-  reportError: (error: Error) => {
-    errors.report(error);
+  reportError: (error: Error, request?: {
+    method?: string;
+    url?: string;
+    userAgent?: string;
+    referrer?: string;
+    statusCode?: number;
+    remoteAddress?: string;
+  }, additionalMessage?: string | {}) => {
+    errors.report(error, request, additionalMessage);
   }
 }

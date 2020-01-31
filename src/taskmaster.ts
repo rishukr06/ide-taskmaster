@@ -76,7 +76,7 @@ subscription.on('message', async (message: Message) => {
       throw error;
     }
   } catch (err) {
-    stackdriver.reportError(err);
+    stackdriver.reportError(err, {}, messageData);
   }
 });
 
@@ -100,4 +100,6 @@ const server = http.createServer(app);
 server.listen(3001);
 
 server.on('listening', () => { });
-server.on('error', err => { stackdriver.reportError(err); process.exit(1) });
+server.on('error', err => {
+  stackdriver.reportError(err, {}, 'Failed to start server.');
+  process.exit(1) });
