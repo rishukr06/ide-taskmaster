@@ -151,3 +151,51 @@ resource "google_compute_autoscaler" "ide_taskmaster_autoscaler" {
     }
   }
 }
+
+resource "google_compute_instance_group_manager" "ide_taskmaster_2_instance_group" {
+  provider = "google-beta"
+  project  = var.project_id
+
+  name               = "ide-taskmaster-2"
+  base_instance_name = "ide-taskmaster-2"
+  zone               = var.zone_2
+  target_size        = var.min_replica
+
+  version {
+    name              = "ide-taskmaster-2"
+    instance_template = google_compute_instance_template.ide_worker.self_link
+  }
+
+  update_policy {
+    minimal_action        = "REPLACE"
+    type                  = "PROACTIVE"
+    min_ready_sec         = var.cool_down_period
+    max_unavailable_fixed = var.max_unavailable_fixed
+    max_surge_fixed       = var.max_surge_fixed
+  }
+}
+
+resource "google_compute_autoscaler" "ide_taskmaster_2_autoscaler" {
+  provider = "google-beta"
+  project  = var.project_id
+
+  name   = "ide-taskmaster-2-autoscaler"
+  zone   = var.zone_2
+  target = google_compute_instance_group_manager.ide_taskmaster__2_instance_group.self_link
+
+  autoscaling_policy {
+    max_replicas    = var.max_replica
+    min_replicas    = var.min_replica
+    cooldown_period = var.cool_down_period
+
+    metric {
+      name                       = "pubsub.googleapis.com/subscription/num_undelivered_messages"
+      filter                     = "resource.type = pubsub_subscription AND resource.label.subscription_id = ${var.ide_tasks_subscription}"
+      single_instance_assignment = var.single_instance_max_task
+    }
+
+    cpu_utilization {
+      target = 0.6
+    }
+  }
+}

@@ -10,6 +10,10 @@ variable "zone" {
   default = "asia-south1-c"
 }
 
+variable "zone_2" {
+  default = "asia-south1-b"
+}
+
 variable "private_subnet_cidr" {
   default = "10.11.11.0/24"
 }
