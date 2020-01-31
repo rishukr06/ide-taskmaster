@@ -39,11 +39,17 @@ const worker = async (message: IJob) => {
     bash -c "/bin/compile.sh && /bin/run.sh"
   `);
 
-  const stdout = cat(path.join(jobExecutionPath, 'run.stdout')).stdout || '';
+  const stdout_file = path.join(jobExecutionPath, 'run.stdout');
+  const stdout = fs.existsSync(stdout_file) ? cat(stdout_file).stdout : '';
 
-  const compile_stderr = cat(path.join(jobExecutionPath, 'compile.stderr')).stdout || '';
-  const stderr = cat(path.join(jobExecutionPath, 'run.stderr')).stdout || '';
-  const tle_err = cat(path.join(jobExecutionPath, 'tle.stderr')).stdout || '';
+  const compile_stderr_file = path.join(jobExecutionPath, 'compile.stderr');
+  const compile_stderr = fs.existsSync(compile_stderr_file) ? cat(compile_stderr_file).stdout : '';
+
+  const stderr_file = path.join(jobExecutionPath, 'run.stderr');
+  const stderr = fs.existsSync(stderr_file) ? cat(stderr_file).stdout : '';
+
+  const tle_err_file = path.join(jobExecutionPath, 'tle.stderr');
+  const tle_err = fs.existsSync(tle_err_file) ? cat(tle_err_file).stdout : '';
 
   let isTLE = false;
   if (tle_err.slice(0, 3) === 'TLE') {
