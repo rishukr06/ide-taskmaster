@@ -79,6 +79,8 @@ resource "google_compute_instance_template" "ide_worker" {
   mkdir -p /tmp/box
   chmod 777 -R /tmp/box
 
+  iptables -A INPUT -d 172.17.0.0/16 -i docker0 -j DROP
+
   docker network create --internal --subnet 10.1.1.0/24 no-internet
 
   tee -a /etc/supervisord.conf > /dev/null <<CONF
