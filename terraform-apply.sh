@@ -24,4 +24,7 @@ terraform validate
 
 terraform taint google_compute_instance_template.ide_worker 2> /dev/null
 
+terraform taint google_compute_autoscaler.ide_taskmaster_autoscaler 2> /dev/null
+terraform taint google_compute_instance_group_manager.ide_taskmaster_instance_group 2> /dev/null
+
 terraform apply -auto-approve
