@@ -181,7 +181,7 @@ resource "google_compute_autoscaler" "ide_taskmaster_2_autoscaler" {
 
   name   = "ide-taskmaster-2-autoscaler"
   zone   = var.zone_2
-  target = google_compute_instance_group_manager.ide_taskmaster__2_instance_group.self_link
+  target = google_compute_instance_group_manager.ide_taskmaster_2_instance_group.self_link
 
   autoscaling_policy {
     max_replicas    = var.max_replica
