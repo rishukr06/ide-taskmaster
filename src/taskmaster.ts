@@ -79,3 +79,25 @@ subscription.on('message', async (message: Message) => {
     stackdriver.reportError(err);
   }
 });
+
+subscription.on('error', err => {
+  stackdriver.reportError(err);
+  process.exit(1);
+});
+
+import * as express from 'express';
+const router = express.Router();
+const app = express();
+import * as http from 'http';
+
+router.all('/_/healthcheck', async (req, res, next) => {
+  return res.status(200).send('OK');
+});
+
+app.use(router);
+
+const server = http.createServer(app);
+server.listen(3001);
+
+server.on('listening', () => { });
+server.on('error', err => { stackdriver.reportError(err); process.exit(1) });

@@ -27,6 +27,20 @@ resource "google_compute_firewall" "deny-all-ingress" {
   target_tags = ["ide-worker"]
 }
 
+resource "google_compute_firewall" "allow-healthcheck-ingress" {
+  name    = "ide-worker-healthcheck-ingress"
+  network = google_compute_network.vpc.name
+
+  allow {
+    protocol = "tcp"
+    ports = ["3001"]
+  }
+
+  priority = 900
+
+  target_tags = ["ide-worker"]
+}
+
 resource "google_compute_subnetwork" "private_subnet" {
   ip_cidr_range            = var.private_subnet_cidr
   name                     = "ide-worker-${var.region}-private-subnet"
