@@ -79,6 +79,8 @@ resource "google_compute_instance_template" "ide_worker" {
   mkdir -p /tmp/box
   chmod 777 -R /tmp/box
 
+  docker network create --internal --subnet 10.1.1.0/24 no-internet
+
   tee -a /etc/supervisord.conf > /dev/null <<CONF
 [program:taskmaster]
 command=node /home/node/taskmaster/dist/taskmaster.js
