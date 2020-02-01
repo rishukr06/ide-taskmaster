@@ -76,12 +76,14 @@ subscription.on('message', async (message: Message) => {
       throw error;
     }
   } catch (err) {
+    console.error(err);
     stackdriver.reportError(err, {}, messageData);
   }
 });
 
 subscription.on('error', err => {
-  stackdriver.reportError(err);
+  console.error(err);
+  stackdriver.reportError(err, {}, 'Failed to subscribe to the topic.');
   process.exit(1);
 });
 
@@ -101,5 +103,6 @@ server.listen(3001);
 
 server.on('listening', () => { });
 server.on('error', err => {
+  console.error(err);
   stackdriver.reportError(err, {}, 'Failed to start server.');
   process.exit(1) });
