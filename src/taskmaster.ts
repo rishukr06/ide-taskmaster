@@ -41,7 +41,7 @@ const subscription = pubsub.subscription(jobSubscriptionName, jobSubscriptionOpt
 
 const outputTopicName: string = config.CLOUD_PUBSUB.OUTPUT_TOPIC;
 
-const done = (message: Message, output: IJobResult) => {
+const done = async (message: Message, output: IJobResult) => {
   const outputBuffer = Buffer.from(JSON.stringify(output));
   return pubsub
     .topic(outputTopicName)
@@ -56,7 +56,19 @@ subscription.on('message', async (message: Message) => {
 
   try {
     const result = await worker(messageData);
-    await done(message, result.output);
+    await done(message, result.output)
+      .catch(async err => {
+        // Task result submission to PubSub could fail on final data being greater than 10MB in size.
+        await done(message, <IJobResult>{
+          job: messageData,
+          stdout: '',
+          stderr: 'Internal server error. Please try again!',
+          compile_stderr: '',
+          isTLE: false
+        });
+
+        return Promise.reject(err);
+      });
 
     if (result.shellOutput.code !== 0) {
       const error = new Error(result.shellOutput.stderr);
