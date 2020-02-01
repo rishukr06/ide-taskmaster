@@ -11,5 +11,6 @@ export interface IJobResult {
   stdout: string
   stderr: string
   compile_stderr: string,
+  time_log: string,
   isTLE: boolean
 }

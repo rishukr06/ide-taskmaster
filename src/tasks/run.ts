@@ -51,6 +51,9 @@ const worker = async (message: IJob) => {
   const tle_err_file = path.join(jobExecutionPath, 'tle.stderr');
   const tle_err = fs.existsSync(tle_err_file) ? cat(tle_err_file).stdout : '';
 
+  const time_log_file = path.join(jobExecutionPath, 'time.log');
+  const time_log = fs.existsSync(time_log_file) ? exec(`< ${time_log_file} tail -n 1`).stdout : '0.00';
+
   let isTLE = false;
   if (tle_err.slice(0, 3) === 'TLE') {
     isTLE = true;
@@ -61,6 +64,7 @@ const worker = async (message: IJob) => {
     stderr,
     compile_stderr,
     stdout,
+    time_log,
     isTLE
   };
 

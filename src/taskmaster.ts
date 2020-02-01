@@ -64,6 +64,7 @@ subscription.on('message', async (message: Message) => {
           stdout: '',
           stderr: 'Internal server error. Please try again!',
           compile_stderr: '',
+          time_log: '0.00',
           isTLE: false
         });
 

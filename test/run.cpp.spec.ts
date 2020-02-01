@@ -10,7 +10,7 @@ int main() {
     char in[10];
     std::cin >> in;
     std::cout << "Hello " << in;
-    
+
     return 0;
 }
 `;
@@ -27,5 +27,6 @@ describe('Test CPP code execution', () => {
     const output: IJobResult = (await worker(job)).output;
     chai.assert.equal(output.stderr, '');
     chai.assert.equal(output.stdout, 'Hello world');
+    chai.expect(output.time_log).satisfies(time => parseFloat(time) >= 0.00);
   });
 });

@@ -17,5 +17,6 @@ describe('Test NodeJS 8 code execution', () => {
     const output: IJobResult = (await worker(job)).output;
     chai.assert.equal(output.stderr, 'Error\n');
     chai.assert.equal(output.stdout, 'Hello world\n');
+    chai.expect(output.time_log).satisfies(time => parseFloat(time) >= 0.00);
   });
 });
