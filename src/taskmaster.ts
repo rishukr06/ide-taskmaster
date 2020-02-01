@@ -55,26 +55,14 @@ subscription.on('message', async (message: Message) => {
   const messageData = JSON.parse(Buffer.from(message.data).toString());
 
   try {
-    const result = await worker(messageData)
-      .then(async result => {
-        await done(message, result.output);
-        return result;
-      })
-      .catch(async err => {
-        await done(message, <IJobResult>{
-          job: messageData,
-          stderr: 'Internal server error. Please try again!',
-          stdout: ''
-        });
-
-        throw err;
-      });
+    const result = await worker(messageData);
+    await done(message, result.output);
 
     if (result.shellOutput.code !== 0) {
       const error = new Error(result.shellOutput.stderr);
       // @ts-ignore
       error.code = result.shellOutput.code;
-      throw error;
+      stackdriver.reportError(error, {}, { messageData, additional: 'Worker failure.' });
     }
   } catch (err) {
     console.error(err);
