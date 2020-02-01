@@ -67,5 +67,5 @@ variable "app_env" {
 }
 
 variable "single_instance_max_task" {
-  default = 2
+  default = 1
 }
