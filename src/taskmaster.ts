@@ -32,7 +32,8 @@ const pubsub = new PubSub(pubsubConfig);
 const jobSubscriptionName: string = config.CLOUD_PUBSUB.SUBSCRIPTION_NAME;
 const jobSubscriptionOptions: SubscriptionOptions = {
   flowControl: {
-    maxMessages: config.WORKER.MAX_CONCURRENT_TASKS
+    maxMessages: config.WORKER.MAX_CONCURRENT_TASKS,
+    allowExcessMessages: false
   }
 };
 
