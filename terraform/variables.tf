@@ -27,7 +27,7 @@ variable "instance_service_account" {
 }
 
 variable "min_replica" {
-  default = 1
+  default = 2
 }
 
 variable "max_replica" {
@@ -43,7 +43,7 @@ variable "max_unavailable_fixed" {
 }
 
 variable "max_surge_fixed" {
-  default = 1
+  default = 2
 }
 
 variable "ide_tasks_name" {
@@ -67,5 +67,5 @@ variable "app_env" {
 }
 
 variable "single_instance_max_task" {
-  default = 10
+  default = 2
 }
