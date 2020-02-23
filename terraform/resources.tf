@@ -83,6 +83,12 @@ resource "google_compute_instance_template" "ide_worker" {
 
   docker network create --internal --subnet 10.1.1.0/24 --opt com.docker.network.bridge.enable_icc=false no-internet
 
+  docker pull ifaisalalam/ide-worker-c
+  docker pull ifaisalalam/ide-worker-cpp
+  docker pull ifaisalalam/ide-worker-python2
+  docker pull ifaisalalam/ide-worker-python3
+  docker pull ifaisalalam/ide-worker-nodejs8
+
   tee -a /etc/supervisord.conf > /dev/null <<CONF
 [program:taskmaster]
 command=node /home/node/taskmaster/dist/taskmaster.js
