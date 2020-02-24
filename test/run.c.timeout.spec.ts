@@ -11,22 +11,22 @@ int main() {
     scanf("%s", in);
     printf("Hello %s", in);
 
+    while (1) {}
     return 0;
 }
 `;
 
-describe('Test C code execution', () => {
+describe('Test C code execution for timeout', () => {
   it('should print "Hello world" to stdout and nothing to stderr', async () => {
     const job: IJob = {
-      id: 1,
+      id: 6,
       lang: 'c',
       source: Buffer.from(c_code).toString('base64'),
       stdin: Buffer.from('world').toString('base64')
     };
 
     const output: IJobResult = (await worker(job)).output;
-    chai.assert.equal(output.stderr, '');
-    chai.assert.equal(output.stdout, 'Hello world');
-    chai.expect(output.exec_time).satisfies(time => parseFloat(time) >= 0.00);
+    chai.assert.equal(output.isTLE, true);
+    chai.assert.equal(output.exec_time, '5.00');
   });
 });

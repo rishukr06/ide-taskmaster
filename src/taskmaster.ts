@@ -63,9 +63,12 @@ subscription.on('message', async (message: Message) => {
           job: messageData,
           stdout: '',
           stderr: 'Internal server error. Please try again!',
+          compile_stdout: '',
           compile_stderr: '',
-          time_log: '0.00',
-          isTLE: false
+          exec_time: '0.00',
+          isTLE: false,
+          isRuntimeErr: false,
+          is_worker_error: true
         });
 
         return Promise.reject(err);

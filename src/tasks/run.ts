@@ -39,11 +39,14 @@ const worker = async (message: IJob) => {
     bash -c "/bin/compile.sh && /bin/run.sh"
   `);
 
-  const stdout_file = path.join(jobExecutionPath, 'run.stdout');
-  const stdout = fs.existsSync(stdout_file) ? cat(stdout_file).stdout : '';
+  const compile_stdout_file = path.join(jobExecutionPath, 'compile.stdout');
+  const compile_stdout = fs.existsSync(compile_stdout_file) ? cat(compile_stdout_file).stdout : '';
 
   const compile_stderr_file = path.join(jobExecutionPath, 'compile.stderr');
   const compile_stderr = fs.existsSync(compile_stderr_file) ? cat(compile_stderr_file).stdout : '';
+
+  const stdout_file = path.join(jobExecutionPath, 'run.stdout');
+  const stdout = fs.existsSync(stdout_file) ? cat(stdout_file).stdout : '';
 
   const stderr_file = path.join(jobExecutionPath, 'run.stderr');
   const stderr = fs.existsSync(stderr_file) ? cat(stderr_file).stdout : '';
@@ -51,21 +54,41 @@ const worker = async (message: IJob) => {
   const tle_err_file = path.join(jobExecutionPath, 'tle.stderr');
   const tle_err = fs.existsSync(tle_err_file) ? cat(tle_err_file).stdout : '';
 
+  let is_worker_error = false;
+  let isRuntimeErr = false;
+
   const time_log_file = path.join(jobExecutionPath, 'time.log');
-  const time_log = fs.existsSync(time_log_file) ? exec(`< ${time_log_file} tail -n 1`).stdout : '0.00';
+
+  let exec_time = '0.00';
+  let exit_status = '0';
+
+  if (fs.existsSync(time_log_file)) {
+    exec_time = exec(`< ${time_log_file} head -n 1`).stdout;
+    exit_status = exec(`< ${time_log_file} tail -n 1`).stdout;
+  } else {
+    is_worker_error = true
+  }
+
+  if (exit_status !== '0') {
+    isRuntimeErr = true;
+  }
 
   let isTLE = false;
   if (tle_err.slice(0, 3) === 'TLE') {
     isTLE = true;
+    exec_time = '5.00'
   }
 
   const output: IJobResult = {
     job: message,
-    stderr,
+    compile_stdout,
     compile_stderr,
     stdout,
-    time_log,
-    isTLE
+    stderr,
+    exec_time,
+    isTLE,
+    isRuntimeErr,
+    is_worker_error
   };
 
   rm('-rf', jobExecutionPath);

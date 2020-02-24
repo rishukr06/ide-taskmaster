@@ -27,6 +27,6 @@ describe('Test CPP code execution', () => {
     const output: IJobResult = (await worker(job)).output;
     chai.assert.equal(output.stderr, '');
     chai.assert.equal(output.stdout, 'Hello world');
-    chai.expect(output.time_log).satisfies(time => parseFloat(time) >= 0.00);
+    chai.expect(output.exec_time).satisfies(time => parseFloat(time) >= 0.00);
   });
 });

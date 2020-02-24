@@ -10,7 +10,10 @@ export interface IJobResult {
   job: IJob
   stdout: string
   stderr: string
-  compile_stderr: string,
-  time_log: string,
+  compile_stdout: string
+  compile_stderr: string
+  exec_time: string
   isTLE: boolean
+  isRuntimeErr: boolean
+  is_worker_error: boolean
 }
