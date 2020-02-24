@@ -64,12 +64,12 @@ const worker = async (message: IJob) => {
 
   if (fs.existsSync(time_log_file)) {
     exec_time = exec(`< ${time_log_file} head -n 1`).stdout;
-    exit_status = exec(`< ${time_log_file} tail -n 1`).stdout;
+    exit_status = exec(`< ${time_log_file} sed "3q;d"`).stdout;
   } else {
     is_worker_error = true
   }
 
-  if (exit_status !== '0') {
+  if (exit_status !== '0\n') {
     isRuntimeErr = true;
   }
 
