@@ -36,9 +36,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Setup Docker
-        uses: docker/build-push-action@v1.1.0
-
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
@@ -68,12 +65,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Setup Docker
-        uses: docker/build-push-action@v1.1.0
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
@@ -83,7 +74,12 @@ jobs:
         run: ./build_docker_image.sh
 
       - name: Push Docker Image to Docker Hub
-        run: ./push_docker_image.sh
+        uses: actions-hub/docker/login@master
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        with:
+          args: push ifaisalalam/ide-taskmaster
 
   deploy:
     name: Deploy
