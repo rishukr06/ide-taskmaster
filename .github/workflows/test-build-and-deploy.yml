@@ -1,4 +1,5 @@
 name: Test, Build and Deploy
+if: "!contains(github.event.head_commit.message, 'skip ci')"
 
 on:
   push:
