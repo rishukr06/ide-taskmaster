@@ -181,7 +181,7 @@ resource "google_compute_instance_group_manager" "ide_taskmaster_2_instance_grou
   }
 
   auto_healing_policies {
-    health_check = google_compute_health_check.ide_taskmaster.self_link
+    health_check      = google_compute_health_check.ide_taskmaster.self_link
     initial_delay_sec = var.cool_down_period + 10
   }
 }
@@ -215,11 +215,11 @@ resource "google_compute_health_check" "ide_taskmaster" {
   name = "ide-taskmaster-health-check"
 
   check_interval_sec = 3
-  timeout_sec = 2
+  timeout_sec        = 2
 
   http_health_check {
     request_path = "/_/healthcheck"
-    response = "OK"
-    port = 3001
+    response     = "OK"
+    port         = 3001
   }
 }

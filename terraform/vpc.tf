@@ -33,7 +33,7 @@ resource "google_compute_firewall" "allow-healthcheck-ingress" {
 
   allow {
     protocol = "tcp"
-    ports = ["3001"]
+    ports    = ["3001"]
   }
 
   priority = 900
@@ -42,9 +42,9 @@ resource "google_compute_firewall" "allow-healthcheck-ingress" {
 }
 
 resource "google_compute_subnetwork" "private_subnet" {
-  ip_cidr_range            = var.private_subnet_cidr
-  name                     = "ide-worker-${var.region}-private-subnet"
-  network                  = google_compute_network.vpc.self_link
-  region                   = var.region
-  enable_flow_logs         = true
+  ip_cidr_range    = var.private_subnet_cidr
+  name             = "ide-worker-${var.region}-private-subnet"
+  network          = google_compute_network.vpc.self_link
+  region           = var.region
+  enable_flow_logs = true
 }

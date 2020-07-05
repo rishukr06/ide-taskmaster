@@ -20,8 +20,12 @@ terraform init \
   --backend-config "bucket=$GCS_BUCKET_NAME" \
   --backend-config "path=$GCS_BUCKET_PATH"
 
+terraform fmt -check
+
 terraform validate
 
 terraform taint google_compute_instance_template.ide_worker 2> /dev/null
+
+terraform plan
 
 terraform apply -auto-approve
