@@ -48,10 +48,10 @@ jobs:
       install:
         - git remote rename origin old-origin
         - git remote add origin https://$GITLAB_USERNAME:$GITLAB_ACCESS_TOKEN@$GITLAB_ORIGIN_REPO
-        - git push -u origin --all
-        - git push -u origin --tags
+        - GIT_SSL_NO_VERIFY=true git push -u origin --all
+        - GIT_SSL_NO_VERIFY=true git push -u origin --tags
       script:
-        - curl -X POST -F token=$GITLAB_TOKEN -F ref=$REF_NAME https://gitlab-ce.ctfhub.io/api/v4/projects/3/trigger/pipeline
+        - curl --insecure -X POST -F token=$GITLAB_TOKEN -F ref=$REF_NAME https://gitlab-ce.ctfhub.io/api/v4/projects/3/trigger/pipeline
 
 stages:
   - test
