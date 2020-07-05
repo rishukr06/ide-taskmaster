@@ -19,7 +19,7 @@ variable "private_subnet_cidr" {
 }
 
 variable "machine_type" {
-  default = "n1-standard-2"
+  default = "n1-standard-1"
 }
 
 variable "instance_service_account" {
