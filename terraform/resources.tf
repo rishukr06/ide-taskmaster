@@ -46,29 +46,29 @@ resource "google_compute_instance_template" "ide_worker" {
   metadata_startup_script = <<SCRIPT
   #!/bin/bash
 
-  yum -y update
-  yum install epel-release
-  yum -y update
-  yum -y install supervisor
-  systemctl start supervisord
-  systemctl enable supervisord
+  sudo yum -y update
+  sudo yum install epel-release
+  sudo yum -y update
+  sudo yum -y install supervisor
+  sudo systemctl start supervisord
+  sudo systemctl enable supervisord
 
-  curl https://get.docker.com | sh
-  systemctl start docker
+  sudo curl https://get.docker.com | sh
+  sudo systemctl start docker
 
-  curl -sL https://rpm.nodesource.com/setup_10.x | sudo bash -
-  yum clean all
-  yum makecache fast
-  yum -y install gcc-c++ make
-  yum -y install nodejs
+  sudo curl -sL https://rpm.nodesource.com/setup_10.x | sudo bash -
+  sudo yum clean all
+  sudo yum makecache fast
+  sudo yum -y install gcc-c++ make
+  sudo yum -y install nodejs
 
-  yum -y install git
+  sudo yum -y install git
 
-  groupadd docker
-  adduser node
-  usermod -aG docker node
+  sudo groupadd docker
+  sudo adduser node
+  sudo usermod -aG docker node
 
-  mkdir -p /home/node/taskmaster
+  sudo mkdir -p /home/node/taskmaster
   git clone https://github.com/ifaisalalam/ide-taskmaster /home/node/taskmaster
   cd /home/node/taskmaster
   npm install
