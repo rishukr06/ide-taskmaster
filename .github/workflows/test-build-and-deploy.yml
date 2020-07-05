@@ -1,0 +1,107 @@
+name: Test, Build and Deploy
+
+on:
+  push:
+    branches:
+      - master
+      - 'release/**'
+  pull_request:
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+      - name: Lint Terraform files
+        working-directory: ./terraform
+        run: terraform fmt -check
+
+  test:
+    name: Test
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Docker
+        uses: docker/build-push-action@v1.1.0
+
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Docker Image
+        run: ./build_docker_image.sh
+
+      - name: Pull worker images
+        run: ./pull_worker_images.sh
+
+      - name: Run Test
+        run: npm run test
+
+      - name: Test as Docker
+        run: ./test_as_docker.sh
+
+  build:
+    name: Build
+    if: github.event_name == 'push'
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Docker
+        uses: docker/build-push-action@v1.1.0
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+
+      - name: Build Docker Image
+        run: ./build_docker_image.sh
+
+      - name: Push Docker Image to Docker Hub
+        run: ./push_docker_image.sh
+
+  deploy:
+    name: Deploy
+    if: github.event_name == 'push'
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+      - name: Deploy to GCE
+        env:
+          GCS_BUCKET_NAME: ${{ secrets.GCS_BUCKET_NAME }}
+          GCS_BUCKET_PATH: ${{ secrets.GCS_BUCKET_PATH }}
+          GOOGLE_CREDENTIALS: ${{ secrets.GCLOUD_SERVICE_ACCOUNT_KEY }}
+        run: ./terraform-apply.sh
